@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Рассылка #{{ mailing.pk }}</h1>
+<p><b>Тема:</b> {{ mailing.message.subject }}</p>
+<p><b>Тело:</b> {{ mailing.message.body }}</p>
+<p><b>Период:</b> {{ mailing.start_time|date:"d.m.Y H:i" }} — {{ mailing.end_time|date:"d.m.Y H:i" }}</p>
+<p><b>Статус:</b> {{ mailing.status }}{% if mailing.is_disabled %} <span class="badge bg-secondary">отключена</span>{% endif %}</p>
+<p><b>Получатели:</b>
+    {% for r in mailing.recipients.all %}{{ r.email }}{% if not forloop.last %}, {% endif %}{% empty %}—{% endfor %}
+</p>
+
+<form method="post" action="{% url 'mailing:mailing_send' mailing.pk %}" class="d-inline">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-primary">Отправить сейчас</button>
+</form>
+{% if user.is_manager %}
+    <form method="post" action="{% url 'mailing:mailing_disable' mailing.pk %}" class="d-inline">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-warning">
+            {% if mailing.is_disabled %}Включить{% else %}Отключить{% endif %}
+        </button>
+    </form>
+{% endif %}
+
+<h2 class="mt-5">Попытки отправки</h2>
+<table class="table table-sm">
+    <thead><tr><th>Дата</th><th>Статус</th><th>Ответ сервера</th></tr></thead>
+    <tbody>
+    {% for a in attempts %}
+        <tr>
+            <td>{{ a.attempt_time|date:"d.m.Y H:i:s" }}</td>
+            <td>
+                {% if a.status == 'Успешно' %}<span class="badge bg-success">{{ a.status }}</span>
+                {% else %}<span class="badge bg-danger">{{ a.status }}</span>{% endif %}
+            </td>
+            <td>{{ a.server_response }}</td>
+        </tr>
+    {% empty %}
+        <tr><td colspan="3" class="text-center text-muted">Попыток ещё не было</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Рассылки</h1>
+    <a class="btn btn-success" href="{% url 'mailing:mailing_create' %}">+ Добавить</a>
+</div>
+<table class="table table-striped">
+    <thead>
+    <tr><th>#</th><th>Тема</th><th>Начало</th><th>Окончание</th><th>Статус</th><th></th></tr>
+    </thead>
+    <tbody>
+    {% for mailing in mailings %}
+        <tr>
+            <td>{{ mailing.pk }}</td>
+            <td>{{ mailing.message.subject }}</td>
+            <td>{{ mailing.start_time|date:"d.m.Y H:i" }}</td>
+            <td>{{ mailing.end_time|date:"d.m.Y H:i" }}</td>
+            <td>
+                {{ mailing.current_status }}
+                {% if mailing.is_disabled %}<span class="badge bg-secondary">отключена</span>{% endif %}
+            </td>
+            <td class="text-end">
+                <a class="btn btn-sm btn-outline-info" href="{% url 'mailing:mailing_detail' mailing.pk %}">Открыть</a>
+                <a class="btn btn-sm btn-outline-primary" href="{% url 'mailing:mailing_update' mailing.pk %}">Ред.</a>
+                <a class="btn btn-sm btn-outline-danger" href="{% url 'mailing:mailing_delete' mailing.pk %}">Удал.</a>
+            </td>
+        </tr>
+    {% empty %}
+        <tr><td colspan="6" class="text-center text-muted">Пока нет рассылок</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Статистика</h1>
+<ul class="list-group mt-3" style="max-width: 500px;">
+    <li class="list-group-item d-flex justify-content-between"><span>Всего рассылок</span><b>{{ total_mailings }}</b></li>
+    <li class="list-group-item d-flex justify-content-between"><span>Всего попыток</span><b>{{ total_attempts }}</b></li>
+    <li class="list-group-item d-flex justify-content-between"><span>Успешных</span><b class="text-success">{{ success_attempts }}</b></li>
+    <li class="list-group-item d-flex justify-content-between"><span>Не успешных</span><b class="text-danger">{{ failed_attempts }}</b></li>
+</ul>
+{% endblock %}

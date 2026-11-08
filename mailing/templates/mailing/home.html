@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="mb-4">Главная</h1>
+<div class="row g-3">
+    <div class="col-md-4">
+        <div class="card text-center p-4">
+            <div class="display-6">{{ total_mailings }}</div>
+            <div>Всего рассылок</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center p-4">
+            <div class="display-6">{{ active_mailings }}</div>
+            <div>Активных рассылок</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center p-4">
+            <div class="display-6">{{ unique_recipients }}</div>
+            <div>Уникальных получателей</div>
+        </div>
+    </div>
+</div>
+<p class="text-muted mt-3 small">Данные закешированы (cache_page 60 сек).</p>
+{% endblock %}

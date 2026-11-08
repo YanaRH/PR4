@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Пользователи</h1>
+<table class="table table-striped mt-3">
+    <thead>
+    <tr><th>Email</th><th>Роль</th><th>Email подтверждён</th><th>Статус</th><th></th></tr>
+    </thead>
+    <tbody>
+    {% for u in users %}
+        <tr>
+            <td>{{ u.email }}</td>
+            <td>{{ u.get_role_display }}</td>
+            <td>{% if u.email_verified %}✅{% else %}❌{% endif %}</td>
+            <td>{% if u.is_blocked %}<span class="badge bg-danger">заблокирован</span>{% else %}<span class="badge bg-success">активен</span>{% endif %}</td>
+            <td class="text-end">
+                <form method="post" action="{% url 'users:user_block' u.pk %}" class="d-inline">
+                    {% csrf_token %}
+                    <button class="btn btn-sm btn-outline-warning" type="submit">
+                        {% if u.is_blocked %}Разблокировать{% else %}Заблокировать{% endif %}
+                    </button>
+                </form>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
